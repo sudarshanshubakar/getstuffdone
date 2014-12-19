@@ -1,0 +1,43 @@
+.body-spacing {
+	margin-left: 10%;
+	margin-right: 10%;
+	padding-left: 2%;
+	padding-right: 2%;
+	border-radius:5px;
+	margin-top:5%;
+}
+
+.nav-spacing {
+	/*margin-left: 10%;*/
+	/*margin-right: 10%;*/
+	padding-left: 10%;
+	padding-right: 10%;
+	font-size: 18px;
+	/*border-radius:5px;*/
+}
+
+span.nav-glyphs {
+	font-size: 20px;
+}
+
+.rotate-45 {
+	transform: rotate(45deg);
+}
+
+.navbar-btn-signin {
+	margin-bottom: 0px;
+}
+
+.navbar-text-small-oblique {
+	font-size: 14px;
+	margin-top: 20px;
+	margin-bottom: 0px;
+	font-style: oblique;
+}
+
+/*#signinButton {
+	margin: 75px;
+}*/
+/*span.glyphicon-user {
+	font-size: 25px;
+}*/

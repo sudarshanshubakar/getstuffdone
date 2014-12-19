@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myProjApp" >
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Proj</title>
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" type="text/css" href="css/lib/bootstrap/dist/css/bootstrap.min.css">
+  <!-- <link rel="stylesheet" type="text/css" href="css/lib/bootstrap-table/bootstrap-table.min.css"> -->
+  <link rel="stylesheet" type="text/css" href="css/global.css">
+  <script src="https://apis.google.com/js/client:platform.js?onload=start" async defer></script>
+  <script src="js/lib/angular.min.js"></script>
+  <script src="js/lib/angular-route.min.js"></script>
+
+
+  <script src="js/app_controller.js"></script>
+
+</head>
+<body >
+ <nav class="navbar navbar-default nav-spacing navbar-fixed-top" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <!-- <a class="navbar-brand" href="#">My Proj</a> -->
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+      <ul class="nav navbar-nav">
+        <li><a href="#/backlog">Backlog <span class="glyphicon glyphicon-list-alt text-primary nav-glyphs" aria-hidden="true"></span></a></li>
+        <li class="dropdown">
+          <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Sprints <span class="glyphicon glyphicon-tasks text-primary nav-glyphs" aria-hidden="true"></span><span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" ng-controller="SprintsController" >
+           <li ng-repeat="sprint in sprints"><a href="#/sprints/{{sprint.id}}">{{sprint.name}}</a></li>
+         </ul>
+       </li>
+       <li><a href="#/sprints/new" style="padding-left: 0px;" title="New Sprint"><span class="glyphicon glyphicon-remove-circle text-primary nav-glyphs rotate-45" aria-hidden="true"></span></a></li>
+     </ul>
+
+     <ul class="nav navbar-nav navbar-right">
+     <li class>
+       <div id="signinButton" class="navbar-btn navbar-btn-signin">
+       <!-- data-scope="https://www.googleapis.com/auth/plus.profile.emails.read" -->
+         <span class="g-signin"
+           data-scope="profile"
+           data-clientid="8386849262-n1rc3i0dtcgn43rc413cvbeuk5rnqh7e.apps.googleusercontent.com"
+           data-accesstype="offline"
+           data-cookiepolicy="single_host_origin"
+           data-callback="signInCallback">
+         </span>
+       </div>
+       </li>
+       <li>
+        <p id="result" class="navbar-text navbar-text-small-oblique"></p>
+      </li>
+      <li class="dropdown">
+        <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">My Account <span class="glyphicon glyphicon-user text-primary nav-glyphs" aria-hidden="true"></span><span class="caret"></span></a>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="#/settings">Settings</a></li>
+          <li><a href="#/profile">Profile</a></li>
+        </ul>
+      </li>
+      <li><a href="" ng-click='logout()' ng-controller="LogoutController">Logout <span class="glyphicon glyphicon-log-out text-danger nav-glyphs" aria-hidden="true"></span></a></li>
+
+    </ul>
+  </div><!-- /.navbar-collapse -->
+</div><!-- /.container-fluid -->
+</nav>
+
+<div ng-view>
+</div>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="css/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!--<script src="js/lib/bootstrap-table/bootstrap-table.min.js"></script>-->
+  <script>
+    function signInCallback(authResult) {
+      if (authResult['code']) {
+
+        // Hide the sign-in button now that the user is authorized, for example:
+        $('#signinButton').attr('style', 'display: none');
+
+        // Send the code to the server
+        $.ajax({
+          type: 'POST',
+          url: 'http://localhost:9000/signin?state=SSS',
+          contentType: 'application/octet-stream; charset=utf-8',
+          success: function(result) {
+            // Handle or verify the server response if necessary.
+
+            // Prints the list of people that the user has allowed the app to know
+            // to the console.
+            console.log(result);
+            if (result['person']){
+              $('#result').html('Hello ' + result['person']['firstName']);
+            } else {
+              $('#result').html('Failed to make a server-side call. Check your configuration and console.');
+            }
+          },
+          processData: false,
+          data: authResult['code']
+        });
+      } else if (authResult['error']) {
+        // There was an error.
+        // Possible error codes:
+        //   "access_denied" - User denied access to your app
+        //   "immediate_failed" - Could not automatially log in the user
+        console.log('There was an error: ' + authResult['error']);
+      }
+    }
+    </script>
+  </body>
+  
+</html>

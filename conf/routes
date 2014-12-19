@@ -1,0 +1,20 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                           controllers.Application.index()
+POST    /signin                     controllers.UserController.storeToken()
+#OPTIONS /signin                    controllers.UserController.options()
+POST    /signout                     controllers.UserController.removeToken()
+GET    /logoutPage                     controllers.Application.showDefaultPage()
+
+
+GET     /sprints                    controllers.SprintController.findAll()
+GET     /sprints/:id                controllers.SprintController.find(id: Long)
+POST    /sprints                    @controllers.sprint.SprintController.create()
+#OPTIONS /sprints                    controllers.SprintController.options()
+GET     /backlog                    controllers.BacklogController.findOpen()
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)

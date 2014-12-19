@@ -1,0 +1,30 @@
+<div class="jumbotron body-spacing" ng-init="sprintPlaceHolder='New Sprint';sprintName=''" ng-controller="NewSprintFormController" >
+  <h2>{{sprintPlaceHolder}} : {{sprintName}}</h2>
+  <div class="container" >
+  	<form role="form" ng-submit="submitForm()">
+  	  <div class="form-group">
+  	    <label for="sprintName">Sprint name</label>
+  	    <input type="text" required class="form-control" ng-model="name" placeholder="{{sprintPlaceHolder}}">
+  	  </div>
+   	  <div class="form-group">
+  	    <label for="sprintDescription">Sprint description</label>
+  	    <textarea class="form-control" id="sprintDescription" placeholder="A description for your sprint" ng-model="description"></textarea>
+  	  </div>
+  	  <div class="form-inline">
+	  	  <div class="form-group">
+	  	    <div class="input-group">
+	  	      <label for="startDate">Start date</label>
+	  	      <input type="text" class="form-control" id="startDate" ng-model="startDate" placeholder="Choose start date">
+	  	    </div>
+	  	   </div>
+	  	  <div class="form-group">
+	  	    <div class="input-group">
+	  	      <label for="endDate">End date</label>
+	  	      <input type="text" class="form-control" id="endDate" ng-model="endDate" placeholder="Choose end date">
+	  	    </div>
+	  	  </div>
+  	  </div>
+	  <br/><button type="submit" id="submit" class="btn btn-primary">Create</button>
+  	</form>
+  </div>
+</div>

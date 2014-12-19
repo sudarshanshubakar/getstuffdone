@@ -1,0 +1,36 @@
+<div class="container body-spacing">
+	<h2>Overall backlog</h2>
+	<table class="table table-hover" >
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Task Name</th>
+				<th>Priority</th>
+				<th>Status</th>
+				<th>Sprint</th>
+				<th>Assigned</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="task in tasks">
+				<td>{{task.id}}</td>
+				<td style="width: 25%">
+					<span ng-if="!task.$edit">{{task.name}}</span>
+                	<div ng-if="task.$edit"><input class="form-control" type="text" ng-model="task.name" /></div>
+                </td>
+				<td style="width: 25%">
+					<span ng-if="!task.$edit">{{task.priority}}</span>
+                	<div ng-if="task.$edit"><input class="form-control" type="text" ng-model="task.priority	" /></div>
+                </td>
+				<td>{{task.status}}</td>
+				<td>{{task.sprint}}</td>
+				<td>{{task.assigned}}</td>
+				<td>
+				    <a ng-if="!task.$edit" href="" class="btn btn-default btn-xs" ng-click="task.$edit = true"><span class="glyphicon glyphicon-pencil text-primary nav-glyphs" aria-hidden="true"></span></a>
+                	<a ng-if="task.$edit" href="" class="btn btn-default btn-xs" ng-controller="TaskController" ng-click="task.$edit = false;editTask()"><span class="glyphicon glyphicon-floppy-save text-primary nav-glyphs" aria-hidden="true"></span></a>
+                </td>
+			</tr>
+		</tbody>
+	</table>
+</div>
