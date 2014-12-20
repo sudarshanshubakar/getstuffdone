@@ -26,12 +26,12 @@ import com.mongodb.MongoClient;
 public class SprintController extends Controller{
 
 	
-	@Security.Authenticated(GoogleAuthenticator.class)
-	public static Result findAll() throws UnknownHostException {
-		List<Sprint> sprints = getSprints();
-		return ok(Json.toJson(sprints));
-		
-	}
+//	@Security.Authenticated(GoogleAuthenticator.class)
+//	public static Result findAll() throws UnknownHostException {
+//		List<Sprint> sprints = getSprints();
+//		return ok(Json.toJson(sprints));
+//		
+//	}
 
 
 	private static List<Sprint> getSprints() throws UnknownHostException {
@@ -52,28 +52,28 @@ public class SprintController extends Controller{
 //		return sprints;
 	}
 	
-	@Security.Authenticated(GoogleAuthenticator.class)
-	public static Result find(Long id) throws UnknownHostException {
-		Sprint input = new Sprint(id, null);
-		List<Sprint> sprints = getSprints();
-		Sprint output = null;
-		if(sprints.contains(input)) {
-			int index = sprints.indexOf(input);
-			output = sprints.get(index);
-		}
-		if(output != null)
-			return ok(Json.toJson(output));
-		else {
-			return notFound();
-		}
-	}
+//	@Security.Authenticated(GoogleAuthenticator.class)
+//	public static Result find(Long id) throws UnknownHostException {
+//		Sprint input = new Sprint(id, null);
+//		List<Sprint> sprints = getSprints();
+//		Sprint output = null;
+//		if(sprints.contains(input)) {
+//			int index = sprints.indexOf(input);
+//			output = sprints.get(index);
+//		}
+//		if(output != null)
+//			return ok(Json.toJson(output));
+//		else {
+//			return notFound();
+//		}
+//	}
 	
-	public static Result options() {
-		response().setHeader(ACCESS_CONTROL_ALLOW_ORIGIN, "*");
-		response().setHeader(ACCESS_CONTROL_ALLOW_METHODS, "POST,OPTIONS,GET");
-		response().setHeader(ACCESS_CONTROL_ALLOW_HEADERS, "Content-Type");
-		return ok();
-	}
+//	public static Result options() {
+//		response().setHeader(ACCESS_CONTROL_ALLOW_ORIGIN, "*");
+//		response().setHeader(ACCESS_CONTROL_ALLOW_METHODS, "POST,OPTIONS,GET");
+//		response().setHeader(ACCESS_CONTROL_ALLOW_HEADERS, "Content-Type");
+//		return ok();
+//	}
 	
 //	@Security.Authenticated(GoogleAuthenticator.class)
 //	public Result create() throws UnknownHostException {

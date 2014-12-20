@@ -17,6 +17,10 @@ my_proj_app.config(function($routeProvider){
 		templateUrl: "assets/backlog.html",
 		controller: "TasksController"
 	})
+	.when('/tasks/new', {
+		templateUrl: "assets/new_task.html",
+		controller: 'NewTaskFormController'		
+	})
 	.when('/sprints/new',{
 		templateUrl: "assets/new_sprint.html",
 		controller: 'NewSprintFormController'
@@ -65,7 +69,23 @@ my_proj_app.controller('NewSprintFormController',['$scope', '$http', '$location'
 		$http.post(url('/sprints'), dataObj)
 		.success(function(data, status, headers, config) {
 			alert(data.message);
-			$location.path("/sprints/"+data.id);
+			$location.path("/sprints/"+data.sprintId);
+		});
+	}
+}]);
+
+my_proj_app.controller('NewTaskFormController',['$scope', '$http', '$location',function($scope, $http, $location){
+	$scope.submitForm = function() {
+		var dataObj = {
+			name : $scope.name,
+			description : $scope.description,
+			priority: $scope.priority
+		}
+		console.log("test in function "+ $scope.name);
+		$http.post(url('/tasks'), dataObj)
+		.success(function(data, status, headers, config) {
+			alert(data.message);
+			$location.path("/backlog");
 		});
 	}
 }]);

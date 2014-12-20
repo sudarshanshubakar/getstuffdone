@@ -1,19 +1,19 @@
 package models;
 
-public class Task {
+import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
 
-	private final Long id;
+@Entity
+public class Task extends SequencedModel {
+
+	@Id
+	private ObjectId id;
 	public String name;
 	public String description;
 	public int priority;
-	public String status;
-	public Task(Long id, String name) {
-		this.id = id;
-		this.name = name;
+	public String status = "";
+	public Task() {
 	}
-	public Long getId() {
-		return id;
-	}
-	
 	
 }

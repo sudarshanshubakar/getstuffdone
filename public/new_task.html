@@ -1,0 +1,24 @@
+<div class="jumbotron body-spacing" ng-init="taskPlaceHolder='New Task';name=''" ng-controller="NewTaskFormController" >
+  <h2>{{taskPlaceHolder}} : {{name}}</h2>
+  <div class="container" >
+    <form role="form" ng-submit="submitForm()">
+      <div class="form-group">
+        <label for="name">Task name</label>
+        <input type="text" required class="form-control" ng-model="name" placeholder="{{taskPlaceHolder}}">
+      </div>
+      <div class="form-group">
+        <label for="description">Task description</label>
+        <textarea class="form-control" id="description" placeholder="A description for your task" ng-model="description"></textarea>
+      </div>
+      <div class="form-inline">
+          <div class="form-group">
+            <div class="input-group">
+              <label for="startDate">Priority</label>
+              <input type="text" class="form-control" id="priority" ng-model="priority" placeholder="Task Priority">
+            </div>
+           </div>
+      </div>
+      <br/><button type="submit" id="submit" class="btn btn-primary">Create</button>
+    </form>
+  </div>
+</div>

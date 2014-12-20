@@ -10,11 +10,14 @@ POST    /signout                     controllers.UserController.removeToken()
 GET    /logoutPage                     controllers.Application.showDefaultPage()
 
 
-GET     /sprints                    controllers.SprintController.findAll()
-GET     /sprints/:id                controllers.SprintController.find(id: Long)
+GET     /sprints                    @controllers.sprint.SprintController.findAll()
+GET     /sprints/:id                @controllers.sprint.SprintController.find(id: Long)
 POST    /sprints                    @controllers.sprint.SprintController.create()
 #OPTIONS /sprints                    controllers.SprintController.options()
-GET     /backlog                    controllers.BacklogController.findOpen()
+
+GET     /backlog                    controllers.TaskController.findOpenTasks()
+
+POST    /tasks                    @controllers.TaskController.create()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

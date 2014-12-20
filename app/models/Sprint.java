@@ -5,8 +5,10 @@ import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 
 @Entity
-public class Sprint {
-	@Id private ObjectId Id;
+public class Sprint extends SequencedModel {
+	@Id private ObjectId id;
+	
+//	private Long sprintId;
 	public String name;
 	public String description;
 	
@@ -15,6 +17,7 @@ public class Sprint {
 	
 	public Sprint() {
 //		Id = System.currentTimeMillis();
+		super();
 	}
 	
 	public Sprint(long id, String name) {
@@ -29,8 +32,16 @@ public class Sprint {
 	}
 
 	public ObjectId getId() {
-		return Id;
+		return id;
 	}
 
-	
+//	public Long getSprintId() {
+//		return sprintId;
+//	}
+//
+//	public void setSprintId(Long sprintId) {
+//		if (this.sprintId == null)
+//			this.sprintId = sprintId;
+//	}
+
 }
