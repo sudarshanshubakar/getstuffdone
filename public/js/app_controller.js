@@ -114,6 +114,13 @@ my_proj_app.controller('SprintsController',['$rootScope', '$http',function($root
 
 my_proj_app.controller('TaskController',['$scope', '$http',function($scope, $http){
 	$scope.editTask = function() {
+		console.log("entityid == "+$scope.task['entityId']);
+		$http.post('/tasks/'+$scope.task['entityId'], $scope.task)
+		.success(function(data, status, headers, config) {
+			alert(data.message);
+			$scope.tasks = null;
+			$location.path("/backlog");
+		});
 		console.log("test in function "+ JSON.stringify($scope.task));
 	}
 }]);

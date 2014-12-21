@@ -13,6 +13,7 @@ public class TaskDAO extends SequencedDAO<Task> {
 //	@Inject
 //	private SequenceDAO seqDAO;
 	
+	
 	@Inject
 	public TaskDAO(Morphia morphia, MongoClient mongo) {
         super(morphia, mongo);
