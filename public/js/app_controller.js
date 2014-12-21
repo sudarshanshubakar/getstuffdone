@@ -13,6 +13,10 @@ my_proj_app.config(function($routeProvider){
 	.when('/', {
 		templateUrl: "assets/start_page.html"
 	})
+	.when('/backlog/select', {
+		templateUrl: "assets/backlog_select.html",
+		controller: "TasksSelectController"
+	})
 	.when('/backlog', {
 		templateUrl: "assets/backlog.html",
 		controller: "TasksController"
@@ -29,7 +33,10 @@ my_proj_app.config(function($routeProvider){
 		templateUrl: "assets/sprint_details.html",
 		controller: 'SprintController'
 	})
-	.when('/logout', {
+	.when('/sprints/:sprint_id/board',{
+		templateUrl: "assets/sprint_board.html",
+		controller: 'SprintTasksController'
+	})	.when('/logout', {
 		templateUrl: "assets/logout.html",
 		controller: 'LogoutController'
 	});
@@ -53,8 +60,21 @@ my_proj_app.controller('SprintController',['$scope','$routeParams', '$http',func
 		$scope.description = data.description;
 		$scope.startDate = data.startDate;
 		$scope.endDate = data.endDate;
+		$scope.sprintId = data.entityId;
 	});
 	
+}]);
+
+my_proj_app.controller('SprintTasksController',['$scope','$routeParams', '$rootScope','$http',function($scope, $routeParams,$rootScope, $http){
+
+	$http.get(url("/sprints/"+$routeParams.sprint_id+"/tasks"))
+	.success(function(data, status, headers, config) {
+		$scope.sprint = data;
+		console.log("Sprint == "+$scope.sprint);
+	})
+	.error(function(data, status, headers, config, statusText) {
+		$rootScope.error = "Failed with code "+status;
+	});
 }]);
 
 my_proj_app.controller('NewSprintFormController',['$scope', '$http', '$location',function($scope, $http, $location){
@@ -93,6 +113,19 @@ my_proj_app.controller('NewTaskFormController',['$scope', '$http', '$location',f
 my_proj_app.controller('TasksController',['$scope', '$rootScope','$http',function($scope, $rootScope, $http){
 
 	$http.get(url("/backlog"))
+	.success(function(data, status, headers, config) {
+		$scope.tasks = data;
+	})
+	.error(function(data, status, headers, config, statusText) {
+//		console.log("data == "+data);
+//		console.log("status == "+ status);
+		$rootScope.error = "Failed with code "+status;
+	});
+}]);
+
+my_proj_app.controller('TasksSelectController',['$scope', '$rootScope','$http',function($scope, $rootScope, $http){
+
+	$http.get(url("/backlog/unassigned"))
 	.success(function(data, status, headers, config) {
 		$scope.tasks = data;
 	})

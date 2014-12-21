@@ -13,6 +13,7 @@ public class Task extends SequencedModel {
 	public String description;
 	public int priority;
 	public String status = "";
+	public Long sprintId;
 	public Task() {
 	}
 	

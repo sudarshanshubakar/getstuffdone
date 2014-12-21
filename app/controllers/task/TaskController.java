@@ -68,4 +68,10 @@ public class TaskController extends Controller {
 		return ok(Json.toJson(tasks));
 	}
 
+	@Security.Authenticated(GoogleAuthenticator.class)
+	public Result findUnassignedTasks() {
+		Query<Task> query = taskDAO.createQuery();
+		List<Task> tasks = taskDAO.find(query.field("sprintId").equal(null)).asList();
+		return ok(Json.toJson(tasks));
+	}
 }

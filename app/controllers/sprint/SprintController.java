@@ -25,7 +25,7 @@ public class SprintController extends Controller {
 		Form<Sprint> form = Form.form(Sprint.class).bindFromRequest();
 		System.out.println("sprint form == " + form.data().toString());
 		Sprint sprint = form.get();
-//		sprint.setSprintId(getSequence());
+		// sprint.setSprintId(getSequence());
 
 		sprintDAO.save(sprint);
 
@@ -34,20 +34,6 @@ public class SprintController extends Controller {
 		result.put("sprintId", sprint.getEntityId());
 		return ok(result);
 	}
-
-//	private long getSequence() {
-//		List<Sequence> sequences = seqDAO.find().asList();
-//		Sequence sequence = null;
-//		if (sequences.size() == 0) {
-//			sequence = new Sequence();
-//			seqDAO.save(sequence);
-//		} else {
-//			sequence = sequences.get(0);
-//		}
-//		long id = sequence.current;
-//		seqDAO.save(sequence.increment());
-//		return id;
-//	}
 
 	@Security.Authenticated(GoogleAuthenticator.class)
 	public Result findAll() {
@@ -58,13 +44,22 @@ public class SprintController extends Controller {
 
 	@Security.Authenticated(GoogleAuthenticator.class)
 	public Result find(Long id) {
-
 		Sprint result = sprintDAO.findOne("entityId", id);
-
 		if (result != null)
 			return ok(Json.toJson(result));
 		else {
 			return notFound();
 		}
 	}
+	
+	@Security.Authenticated(GoogleAuthenticator.class)
+	public Result sprintTasks(Long id) {
+		Sprint result = sprintDAO.findOne("entityId", id);
+		if (result != null)
+			return ok(Json.toJson(result));
+		else {
+			return notFound();
+		}
+	}	
+	
 }

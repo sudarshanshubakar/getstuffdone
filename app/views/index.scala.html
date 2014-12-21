@@ -36,7 +36,7 @@
         <li class="dropdown">
           <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Sprints <span class="glyphicon glyphicon-tasks text-primary nav-glyphs" aria-hidden="true"></span><span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu" ng-controller="SprintsController" >
-           <li ng-repeat="sprint in sprints"><a href="#/sprints/{{sprint.id}}">{{sprint.name}}</a></li>
+           <li ng-repeat="sprint in sprints"><a href="#/sprints/{{sprint.entityId}}">{{sprint.name}}</a></li>
          </ul>
        </li>
        <li><a href="#/sprints/new" style="padding-left: 0px;" title="New Sprint"><span class="glyphicon glyphicon-remove-circle text-primary nav-glyphs rotate-45" aria-hidden="true"></span></a></li>
