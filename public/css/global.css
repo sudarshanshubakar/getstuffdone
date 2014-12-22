@@ -35,6 +35,11 @@ span.nav-glyphs {
 	font-style: oblique;
 }
 
+.inline-list li {
+	display: inline-block;
+	padding-right: 1%;
+}
+
 /*#signinButton {
 	margin: 75px;
 }*/

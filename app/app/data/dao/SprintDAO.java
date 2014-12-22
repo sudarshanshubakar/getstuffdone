@@ -4,16 +4,14 @@ import javax.inject.Inject;
 
 import models.Sprint;
 
-import org.bson.types.ObjectId;
 import org.mongodb.morphia.Morphia;
-import org.mongodb.morphia.dao.BasicDAO;
 
 import com.mongodb.MongoClient;
 
-public class SprintDAO extends BasicDAO<Sprint, ObjectId>{
+public class SprintDAO extends SequencedDAO<Sprint>{
 
 	@Inject
-	public SprintDAO(Morphia morphia, MongoClient mongo) {
-        super(mongo, morphia, "get_work_done");
-    }
+	protected SprintDAO(Morphia morphia, MongoClient mongo) {
+		super(morphia, mongo);
+	}
 }

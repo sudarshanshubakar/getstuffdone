@@ -13,9 +13,17 @@ my_proj_app.config(function($routeProvider){
 	.when('/', {
 		templateUrl: "assets/start_page.html"
 	})
+	.when('/backlog/select', {
+		templateUrl: "assets/backlog_select.html",
+		controller: "TasksSelectController"
+	})
 	.when('/backlog', {
 		templateUrl: "assets/backlog.html",
 		controller: "TasksController"
+	})
+	.when('/tasks/new', {
+		templateUrl: "assets/new_task.html",
+		controller: 'NewTaskFormController'		
 	})
 	.when('/sprints/new',{
 		templateUrl: "assets/new_sprint.html",
@@ -25,7 +33,10 @@ my_proj_app.config(function($routeProvider){
 		templateUrl: "assets/sprint_details.html",
 		controller: 'SprintController'
 	})
-	.when('/logout', {
+	.when('/sprints/:sprint_id/board',{
+		templateUrl: "assets/sprint_board.html",
+		controller: 'SprintTasksController'
+	})	.when('/logout', {
 		templateUrl: "assets/logout.html",
 		controller: 'LogoutController'
 	});
@@ -49,8 +60,21 @@ my_proj_app.controller('SprintController',['$scope','$routeParams', '$http',func
 		$scope.description = data.description;
 		$scope.startDate = data.startDate;
 		$scope.endDate = data.endDate;
+		$scope.sprintId = data.entityId;
 	});
 	
+}]);
+
+my_proj_app.controller('SprintTasksController',['$scope','$routeParams', '$rootScope','$http',function($scope, $routeParams,$rootScope, $http){
+
+	$http.get(url("/sprints/"+$routeParams.sprint_id+"/tasks"))
+	.success(function(data, status, headers, config) {
+		$scope.sprint = data;
+		console.log("Sprint == "+$scope.sprint);
+	})
+	.error(function(data, status, headers, config, statusText) {
+		$rootScope.error = "Failed with code "+status;
+	});
 }]);
 
 my_proj_app.controller('NewSprintFormController',['$scope', '$http', '$location',function($scope, $http, $location){
@@ -65,7 +89,23 @@ my_proj_app.controller('NewSprintFormController',['$scope', '$http', '$location'
 		$http.post(url('/sprints'), dataObj)
 		.success(function(data, status, headers, config) {
 			alert(data.message);
-			$location.path("/sprints/"+data.id);
+			$location.path("/sprints/"+data.sprintId);
+		});
+	}
+}]);
+
+my_proj_app.controller('NewTaskFormController',['$scope', '$http', '$location',function($scope, $http, $location){
+	$scope.submitForm = function() {
+		var dataObj = {
+			name : $scope.name,
+			description : $scope.description,
+			priority: $scope.priority
+		}
+		console.log("test in function "+ $scope.name);
+		$http.post(url('/tasks'), dataObj)
+		.success(function(data, status, headers, config) {
+			alert(data.message);
+			$location.path("/backlog");
 		});
 	}
 }]);
@@ -73,6 +113,19 @@ my_proj_app.controller('NewSprintFormController',['$scope', '$http', '$location'
 my_proj_app.controller('TasksController',['$scope', '$rootScope','$http',function($scope, $rootScope, $http){
 
 	$http.get(url("/backlog"))
+	.success(function(data, status, headers, config) {
+		$scope.tasks = data;
+	})
+	.error(function(data, status, headers, config, statusText) {
+//		console.log("data == "+data);
+//		console.log("status == "+ status);
+		$rootScope.error = "Failed with code "+status;
+	});
+}]);
+
+my_proj_app.controller('TasksSelectController',['$scope', '$rootScope','$http',function($scope, $rootScope, $http){
+
+	$http.get(url("/backlog/unassigned"))
 	.success(function(data, status, headers, config) {
 		$scope.tasks = data;
 	})
@@ -94,6 +147,13 @@ my_proj_app.controller('SprintsController',['$rootScope', '$http',function($root
 
 my_proj_app.controller('TaskController',['$scope', '$http',function($scope, $http){
 	$scope.editTask = function() {
+		console.log("entityid == "+$scope.task['entityId']);
+		$http.post('/tasks/'+$scope.task['entityId'], $scope.task)
+		.success(function(data, status, headers, config) {
+			alert(data.message);
+			$scope.tasks = null;
+			$location.path("/backlog");
+		});
 		console.log("test in function "+ JSON.stringify($scope.task));
 	}
 }]);

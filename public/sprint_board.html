@@ -1,10 +1,10 @@
 <div class="container body-spacing">
 	<ul class="inline-list">
 		<li>
-			<h2>Overall backlog</h2>
+			<h2>{{sprint.name}} backlog</h2>
 		</li>
-		<li><a href="#/tasks/new" style="padding-left: 0px;"
-			title="New Task"><span
+		<li><a href="#/backlog/select" style="padding-left: 0px;"
+			title="Add Task From Overall Backlog"><span
 				class="glyphicon glyphicon-remove-circle text-primary nav-glyphs rotate-45"
 				aria-hidden="true"></span></a></li>
 	</ul>
@@ -21,7 +21,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr ng-repeat="task in tasks">
+			<tr ng-repeat="task in sprint.tasks">
 				<td>{{task.id}}</td>
 				<td style="width: 25%">
 					<span ng-if="!task.$edit">{{task.name}}</span>

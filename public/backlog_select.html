@@ -1,0 +1,33 @@
+<div class="container body-spacing">
+	<ul class="inline-list">
+		<li>
+			<h2>Select tasks from backlog</h2>
+		</li>
+		<li><a href="#/tasks/new" style="padding-left: 0px;"
+			title="New Task"><span
+				class="glyphicon glyphicon-remove-circle text-primary nav-glyphs rotate-45"
+				aria-hidden="true"></span></a></li>
+	</ul>
+	<table class="table table-hover" >
+		<thead>
+			<tr>
+			    <th>Select</th>
+				<th>#</th>
+				<th>Task Name</th>
+				<th>Description</th>
+				<th>priority</th>
+				<th>Status</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="task in tasks">
+                <td><input type="checkbox"></td>
+				<td>{{task.entityId}}</td>
+				<td>{{task.name}}</td>
+                <td>{{task.description}}</td>
+				<td>{{task.priority}}</td>
+				<td>{{task.status}}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

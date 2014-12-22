@@ -1,40 +1,65 @@
 package controllers.sprint;
 
-import java.net.UnknownHostException;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import models.Sprint;
-
-import org.mongodb.morphia.Key;
-
-import app.data.dao.SprintDAO;
-import authentication.authenticator.GoogleAuthenticator;
-
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
 import play.data.Form;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
+import app.data.dao.SprintDAO;
+import authentication.authenticator.GoogleAuthenticator;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class SprintController extends Controller {
-	
+
 	@Inject
 	SprintDAO sprintDAO;
+
+	@Security.Authenticated(GoogleAuthenticator.class)
+	public Result create() {
+		Form<Sprint> form = Form.form(Sprint.class).bindFromRequest();
+		System.out.println("sprint form == " + form.data().toString());
+		Sprint sprint = form.get();
+		// sprint.setSprintId(getSequence());
+
+		sprintDAO.save(sprint);
+
+		ObjectNode result = Json.newObject();
+		result.put("message", "Sprint " + sprint.name + " created successfully");
+		result.put("sprintId", sprint.getEntityId());
+		return ok(result);
+	}
+
+	@Security.Authenticated(GoogleAuthenticator.class)
+	public Result findAll() {
+		List<Sprint> sprints = sprintDAO.find().asList();
+		return ok(Json.toJson(sprints));
+
+	}
+
+	@Security.Authenticated(GoogleAuthenticator.class)
+	public Result find(Long id) {
+		Sprint result = sprintDAO.findOne("entityId", id);
+		if (result != null)
+			return ok(Json.toJson(result));
+		else {
+			return notFound();
+		}
+	}
 	
 	@Security.Authenticated(GoogleAuthenticator.class)
-	public Result create() throws UnknownHostException {
-	    Form<Sprint> form = Form.form(Sprint.class).bindFromRequest();
-	    System.out.println("sprint form == "+form.data().toString());
-	    Sprint sprint = form.get();
-
-	    Key<Sprint> savedSprint = sprintDAO.save(sprint);
-	    
-	    ObjectNode result = Json.newObject();
-	    result.put("message", "Sprint "+sprint.name+" created successfylly");
-	    result.put("id", savedSprint.getId().toString());
-	    return ok(result);
-	}
+	public Result sprintTasks(Long id) {
+		Sprint result = sprintDAO.findOne("entityId", id);
+		if (result != null)
+			return ok(Json.toJson(result));
+		else {
+			return notFound();
+		}
+	}	
+	
 }
