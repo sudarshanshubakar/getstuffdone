@@ -22,7 +22,7 @@
 		</thead>
 		<tbody>
 			<tr ng-repeat="task in sprint.tasks">
-				<td>{{task.id}}</td>
+				<td>{{task.entityId}}</td>
 				<td style="width: 25%">
 					<span ng-if="!task.$edit">{{task.name}}</span>
                 	<div ng-if="task.$edit"><input class="form-control" type="text" ng-model="task.name" /></div>

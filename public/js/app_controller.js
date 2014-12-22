@@ -71,7 +71,7 @@ my_proj_app.controller('SprintTasksController',['$scope','$routeParams', '$rootS
 	$http.get(url("/sprints/"+$routeParams.sprint_id+"/tasks"))
 	.success(function(data, status, headers, config) {
 		$scope.sprint = data;
-		console.log("Sprint == "+$scope.sprint);
+		console.log("Sprint == "+JSON.stringify($scope.sprint));
 	})
 	.error(function(data, status, headers, config, statusText) {
 		$rootScope.error = "Failed with code "+status;
@@ -80,25 +80,18 @@ my_proj_app.controller('SprintTasksController',['$scope','$routeParams', '$rootS
 
 my_proj_app.controller('AddToSprintController',['$scope','$routeParams', '$rootScope','$http',function($scope, $routeParams,$rootScope, $http){
 	$scope.addToSprint = function() {
-//		var dataObj = {
-//			name : $scope.name,
-//			description : $scope.description,
-//			startDate: $scope.startDate,
-//			endDate: $scope.endDate
-//		}
-		var selectedTaskIds = []
+		var selectedTasks = []
 		$scope.tasks.forEach(function(task, index, arr) {
 			if (task['selected']=== true) {
-				selectedTaskIds.push(task.entityId);
+				selectedTasks.push(task);
 			}
 		});
 		
-		console.log("selected task ids = "+ selectedTaskIds);
+		console.log("selected task ids = "+ selectedTasks);
 		console.log("sprint id "+ $scope.sprintId);
 		
 		var dataObj = {
-//				entityId : $scope.sprintId,
-				taskIds : selectedTaskIds
+				tasks : selectedTasks
 		}
 		console.log("dataObj "+ JSON.stringify(dataObj));
 		$http.post(url('/sprints/'+$scope.sprintId+'/tasks'), dataObj)

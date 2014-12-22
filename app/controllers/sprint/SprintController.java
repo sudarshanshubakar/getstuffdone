@@ -1,21 +1,22 @@
 package controllers.sprint;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import org.mongodb.morphia.query.Query;
+
 import models.Sprint;
+import models.Task;
 import play.data.Form;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import app.data.dao.SprintDAO;
+import app.data.dao.TaskDAO;
 import authentication.authenticator.GoogleAuthenticator;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class SprintController extends Controller {
@@ -23,6 +24,9 @@ public class SprintController extends Controller {
 	@Inject
 	SprintDAO sprintDAO;
 
+	@Inject
+	TaskDAO taskDAO;
+	
 	@Security.Authenticated(GoogleAuthenticator.class)
 	public Result create() {
 		Form<Sprint> form = Form.form(Sprint.class).bindFromRequest();
@@ -57,39 +61,30 @@ public class SprintController extends Controller {
 	
 	@Security.Authenticated(GoogleAuthenticator.class)
 	public Result sprintTasks(Long id) {
-		Sprint result = sprintDAO.findOne("entityId", id);
-		if (result != null)
-			return ok(Json.toJson(result));
+		Sprint sprintFromDb = sprintDAO.findOne("entityId", id);
+		
+		if (sprintFromDb.tasks != null)
+			return ok(Json.toJson(sprintFromDb));
 		else {
 			return notFound();
 		}
 	}
 	
+	@Security.Authenticated(GoogleAuthenticator.class)
 	public Result addSprintTasks(Long id) {
 		Sprint sprintFromDb = sprintDAO.findOne("entityId", id);
-//		Form<Sprint> form = Form.form(Sprint.class).bindFromRequest();
-//		System.out.println("sprint form == " + form.data().toString());
-//		Sprint inputSprint = form.get();
-		System.out.println("request  == "+request().body().asJson().get("taskIds").  .getNodeType());
-		Iterator<JsonNode> elements = request().body().asJson().get("taskIds").elements();
-		
-//		Long[] ids = request().body().asJson().get("taskIds");
-//		List<Long> taskIdList = getTasksForSprint(sprintFromDb);
-//		taskIdList.addAll(getTasksForSprint(inputSprint));
-//		sprintFromDb.taskIds = taskIdList.toArray(new Long[] {});
-//		sprintDAO.save(sprintFromDb);
-		return ok("Tasks added to Sprint "+sprintFromDb+" successfully.");
-	}
-
-	private List<Long> getTasksForSprint(Sprint sprint) {
-		List<Long> taskIdList = new ArrayList<Long>();
-		if (sprint != null) {
-			for (Long taskId : sprint.taskIds) {
-				taskIdList.add(taskId);
-			}
+		Form<Sprint> form = Form.form(Sprint.class).bindFromRequest();
+		System.out.println("sprint form == " + form.data().toString());
+		Sprint inputSprint = form.get();
+		if (sprintFromDb.tasks != null) {
+			sprintFromDb.tasks.addAll(inputSprint.tasks);
+		} else {
+			sprintFromDb.tasks = inputSprint.tasks;
 		}
-		return taskIdList;
+		sprintDAO.save(sprintFromDb);
+		ObjectNode result = Json.newObject();
+		result.put("message", "Tasks added to Sprint \""+sprintFromDb.name+"\" successfully.");
+		result.put("sprintId", sprintFromDb.getEntityId());
+		return ok(result);
 	}
-	
-	
 }

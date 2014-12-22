@@ -15,12 +15,15 @@ public abstract  class  SequencedDAO<T extends SequencedModel> extends BasicDAO<
 
 	@Inject
 	private SequenceDAO seqDAO;
+	
 	protected SequencedDAO(Morphia morphia, MongoClient mongo) {
         super(mongo, morphia, "get_work_done");
     }
 	@Override
 	public Key<T> save(T entity) {
-		entity.setEntityId(seqDAO.getSequence());
+		if(super.get(entity.getId()) == null) {
+			entity.setEntityId(seqDAO.getSequence());
+		}
 		return super.save(entity);
 	}
 }
