@@ -13,10 +13,7 @@ my_proj_app.config(function($routeProvider){
 	.when('/', {
 		templateUrl: "assets/start_page.html"
 	})
-	.when('/backlog/select', {
-		templateUrl: "assets/backlog_select.html",
-		controller: "TasksSelectController"
-	})
+
 	.when('/backlog', {
 		templateUrl: "assets/backlog.html",
 		controller: "TasksController"
@@ -36,7 +33,11 @@ my_proj_app.config(function($routeProvider){
 	.when('/sprints/:sprint_id/board',{
 		templateUrl: "assets/sprint_board.html",
 		controller: 'SprintTasksController'
-	})	.when('/logout', {
+	})	
+	.when('/sprints/:sprint_id/backlog/select', {
+		templateUrl: "assets/backlog_select.html",
+		controller: "TasksSelectController"
+	}).when('/logout', {
 		templateUrl: "assets/logout.html",
 		controller: 'LogoutController'
 	});
@@ -75,6 +76,37 @@ my_proj_app.controller('SprintTasksController',['$scope','$routeParams', '$rootS
 	.error(function(data, status, headers, config, statusText) {
 		$rootScope.error = "Failed with code "+status;
 	});
+}]);
+
+my_proj_app.controller('AddToSprintController',['$scope','$routeParams', '$rootScope','$http',function($scope, $routeParams,$rootScope, $http){
+	$scope.addToSprint = function() {
+//		var dataObj = {
+//			name : $scope.name,
+//			description : $scope.description,
+//			startDate: $scope.startDate,
+//			endDate: $scope.endDate
+//		}
+		var selectedTaskIds = []
+		$scope.tasks.forEach(function(task, index, arr) {
+			if (task['selected']=== true) {
+				selectedTaskIds.push(task.entityId);
+			}
+		});
+		
+		console.log("selected task ids = "+ selectedTaskIds);
+		console.log("sprint id "+ $scope.sprintId);
+		
+		var dataObj = {
+//				entityId : $scope.sprintId,
+				taskIds : selectedTaskIds
+		}
+		console.log("dataObj "+ JSON.stringify(dataObj));
+		$http.post(url('/sprints/'+$scope.sprintId+'/tasks'), dataObj)
+		.success(function(data, status, headers, config) {
+			alert(data.message);
+			$location.path("/sprints/"+data.sprintId);
+		});
+	}
 }]);
 
 my_proj_app.controller('NewSprintFormController',['$scope', '$http', '$location',function($scope, $http, $location){
@@ -123,11 +155,12 @@ my_proj_app.controller('TasksController',['$scope', '$rootScope','$http',functio
 	});
 }]);
 
-my_proj_app.controller('TasksSelectController',['$scope', '$rootScope','$http',function($scope, $rootScope, $http){
+my_proj_app.controller('TasksSelectController',['$scope', '$rootScope','$routeParams','$http',function($scope, $rootScope, $routeParams, $http){
 
 	$http.get(url("/backlog/unassigned"))
 	.success(function(data, status, headers, config) {
 		$scope.tasks = data;
+		$scope.sprintId = $routeParams.sprint_id;
 	})
 	.error(function(data, status, headers, config, statusText) {
 //		console.log("data == "+data);

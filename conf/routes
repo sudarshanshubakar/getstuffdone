@@ -13,6 +13,7 @@ GET    /logoutPage                     controllers.Application.showDefaultPage()
 GET     /sprints                    @controllers.sprint.SprintController.findAll()
 GET     /sprints/:id                @controllers.sprint.SprintController.find(id: Long)
 GET     /sprints/:id/tasks                @controllers.sprint.SprintController.sprintTasks(id: Long)
+POST     /sprints/:id/tasks                @controllers.sprint.SprintController.addSprintTasks(id: Long)
 
 POST    /sprints                    @controllers.sprint.SprintController.create()
 

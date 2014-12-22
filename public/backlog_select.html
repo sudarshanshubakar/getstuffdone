@@ -3,9 +3,13 @@
 		<li>
 			<h2>Select tasks from backlog</h2>
 		</li>
-		<li><a href="#/tasks/new" style="padding-left: 0px;"
-			title="New Task"><span
-				class="glyphicon glyphicon-remove-circle text-primary nav-glyphs rotate-45"
+		<li><a href="#/tasks/new" class="btn btn-primary toolbar_button"
+			role="button" title="New Task"><span
+				class="glyphicon glyphicon-remove-circle nav-glyphs rotate-45"
+				aria-hidden="true"></span></a></li>
+		<li><a href="" class="btn btn-success toolbar_button" ng-click="addToSprint()" ng-controller="AddToSprintController"
+			role="button" title="Add Task to {{sprint.name}}"><span
+				class="glyphicon glyphicon-check nav-glyphs"
 				aria-hidden="true"></span></a></li>
 	</ul>
 	<table class="table table-hover" >
@@ -21,7 +25,7 @@
 		</thead>
 		<tbody>
 			<tr ng-repeat="task in tasks">
-                <td><input type="checkbox"></td>
+                <td><input type="checkbox" ng-model="task.selected"></td>
 				<td>{{task.entityId}}</td>
 				<td>{{task.name}}</td>
                 <td>{{task.description}}</td>
